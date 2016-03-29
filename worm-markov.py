@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import sys, os
+import sys, os, re
 from pymarkovchain import MarkovChain
 
 # Change these as you like.
@@ -30,13 +30,32 @@ else:
 # Generate the string
 # We could be a bit smarter about this, but it works fairly well
 gen_string = ''
+short_counter = 0
 while len(gen_string) < GENERATED_STRING_LENGTH:
-    new_str = mc.generateString()
+    new_str = mc.generateString().strip()
+    new_str = re.sub(r' , ?', ', ', new_str)
 
+    # Too short or too long to be meaningful
+    if len(new_str) < 4 or len(new_str) > 100:
+        continue
+
+    # Don't allow too many very short phrases.
+    if len(new_str) < 30:
+        if short_counter > 3:
+            continue
+        short_counter += 1
+
+    # Handle punctuation
     if gen_string.endswith(','):
-        new_str = new_str[0].lower() + new_str[1:]
-    else:
-        new_str += '. '
+        new_str = ' ' + new_str[0].lower() + new_str[1:]
+
+    if not new_str.endswith(','):
+        if (gen_string.endswith('. ') or gen_string.endswith('? ')) and re.search(r'^(are|who|what|when|where|why|how)', new_str.lower()):
+            new_str += '? '
+        else:
+            new_str += '. '
+    elif len(gen_string) + len(new_str) >= GENERATED_STRING_LENGTH:
+        new_str = new_str[:-1] + '.'
 
     gen_string += new_str
 
