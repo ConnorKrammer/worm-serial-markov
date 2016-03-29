@@ -4,10 +4,15 @@ import sys, os, re
 from pymarkovchain import MarkovChain
 
 # Change these as you like.
-DB_FILE = './worm-markov-db'
-SOURCE_FILE = './worm-full-text.txt'
-OUTPUT_FILE = './generated-text.txt'
+BASE        = os.path.dirname(os.path.abspath(__file__))
+DB_FILE     = os.path.join(BASE, 'worm-markov-db')
+SOURCE_FILE = os.path.join(BASE, 'worm-full-text.txt')
+OUTPUT_FILE = os.path.join(BASE, 'generated-text.txt')
 GENERATED_STRING_LENGTH = 500
+
+# Allow command line argument override
+if len(sys.argv) >= 2 and sys.argv[1].isdigit():
+    GENERATED_STRING_LENGTH = int(sys.argv[1])
 
 if not os.path.isfile(DB_FILE):
     # Handle common user errors
@@ -59,7 +64,12 @@ while len(gen_string) < GENERATED_STRING_LENGTH:
 
     gen_string += new_str
 
-# Write the generated text to file and output in console.
+# Print output. We do this for users of the command line, as well
+# as for the node.js script that calls this from www/
 print(gen_string)
-with open(OUTPUT_FILE, 'w') as f:
-    f.write(gen_string)
+sys.stdout.flush()
+
+# Save to file, unless --no-save was passed
+if len(sys.argv) < 3 or sys.argv[2] != '--no-save':
+    with open(OUTPUT_FILE, 'w') as f:
+        f.write(gen_string)
