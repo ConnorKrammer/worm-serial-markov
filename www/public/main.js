@@ -2,14 +2,15 @@ document.addEventListener("DOMContentLoaded", function() {
     'use strict';
 
     var textLocation = document.querySelectorAll('#generated p')[0]
+    var container = textLocation.parentElement;
     var button = document.getElementById('generate-button');
     var lengthField = document.getElementById('generate-length');
 
     textLocation.textContent = '';
 
     // Only allow numbers in length input
-    lengthField.addEventListener('input', function (event) {
-        var text = this.value;
+    function validateLengthField() {
+        var text = lengthField.value;
 
         text = text.replace(/[^0-9]/g, '');
 
@@ -17,37 +18,49 @@ document.addEventListener("DOMContentLoaded", function() {
             text = 5000
         }
 
-        this.value = text + ' chars';
-    });
-
-    lengthField.addEventListener('keypress', function (event) {
-        if (event.which === 13) generate();
-    });
+        lengthField.value = text + ' chars';
+    }
 
     // Send an HTTP request asking for the text, then fill the box
     function generate(event) {
         if (event) event.preventDefault();
-        textLocation.parentElement.classList.add('loading');
+
+        if (container.classList.contains('loading')) return;
+        container.classList.add('loading');
 
         var xmlhttp = new XMLHttpRequest();
         var genLength = lengthField.value.replace(/[^0-9]/g, '');
 
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
-                    textLocation.textContent = xmlhttp.responseText;
-                } else {
-                    textLocation.textContent = "Whoops, an error occurred."
-                }
-                textLocation.parentElement.classList.remove('loading');
+                // add a bit more visual delay
+                window.setTimeout(function() {
+                    if (xmlhttp.status == 200) {
+                        textLocation.textContent = xmlhttp.responseText;
+                    } else {
+                        textLocation.textContent = "Whoops, an error occurred."
+                    }
+
+                    container.classList.remove('loading');
+                }, 200);
             }
         };
 
-        xmlhttp.open("GET", './generate?length=' + genLength);
+        xmlhttp.open("GET", 'http://159.203.4.7:8081?length=' + genLength);
         xmlhttp.send();
     }
 
     button.addEventListener('click', generate);
+
+    lengthField.addEventListener('blur', validateLengthField);
+
+    lengthField.addEventListener('keypress', function (event) {
+        if (event.which === 13) {
+            validateLengthField();
+	    generate();
+	}
+    });
+
 
     generate();
 });

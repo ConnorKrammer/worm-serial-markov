@@ -88,12 +88,12 @@ a:not(.link-cover):hover {
 
 #generated p {
     opacity: 1;
-    transition: opacity 500ms 500ms ease-out;
+    transition: opacity 200ms 500ms ease-out;
 }
 
 #generated.loading p {
     opacity: 0;
-    transition: opacity 500ms ease-out;
+    transition: opacity 200ms ease-out;
 }
 
 #generate-length, #generate-button {
@@ -112,12 +112,18 @@ a:not(.link-cover):hover {
     color: #fff;
 }
 
+
 #generate-button:hover {
     background: #333;
 }
 
 #generate-button:active {
     top: 2px;
+}
+
+.loading #generate-button {
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 /*===========================
@@ -134,12 +140,12 @@ a:not(.link-cover):hover {
     margin-right: -35px;
     text-align: center;
     opacity: 0;
-    transition: opacity 500ms ease-out;
+    transition: opacity 200ms 500ms ease-out;
 }
 
 .loading .spinner {
     opacity: 1;
-    transition: opacity 500ms 500ms ease-out;
+    transition: opacity 200ms ease-out;
 }
 
 .spinner::before {
