@@ -141,6 +141,7 @@ a:not(.link-cover):hover {
     text-align: center;
     opacity: 0;
     transition: opacity 200ms 500ms ease-out;
+    pointer-events: none;
 }
 
 .loading .spinner {
