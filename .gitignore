@@ -1,0 +1,4 @@
+worm-full-text.txt
+worm-markov-db
+generated-text.txt
+*.pyc
