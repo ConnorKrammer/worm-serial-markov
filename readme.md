@@ -13,4 +13,4 @@ contain the full text, only a copy that has been decomposed into its composite w
 ## Usage
 
 1. Unzip the Markov chain database
-2. Run your code: `python worm-markov.py
+2. Run your code: `python worm-markov.py`
