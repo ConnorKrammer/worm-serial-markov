@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         };
 
-        xmlhttp.open("GET", 'http://159.203.4.7:8081?length=' + genLength);
+        xmlhttp.open("GET", 'http://www.parahumans.online:8081?length=' + genLength);
         xmlhttp.send();
     }
 

@@ -80,7 +80,7 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
  
         # Send headers
         self.send_header('Content-type','text/plaintext')
-        self.send_header('Access-Control-Allow-Origin', 'http://159.203.4.7:8001')
+        self.send_header('Access-Control-Allow-Origin', 'http://parahumans.online:8001')
         self.end_headers()
  
         # Send message back to client
